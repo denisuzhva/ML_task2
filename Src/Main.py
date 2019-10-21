@@ -1,10 +1,11 @@
 import numpy as np
-from LinearRegressor import LinearRegressor
+from FactorizationMachine import FactorizationMachine
 from Session import Session
 import DatasetToolbox as dt
 
 
 NUM_FEATURES = 53   # number of features
+NUM_FACTORS = 5 # number of factors (aka k)
 LR = 1 * 1e-3   # learning rate constant
 BATCH_LIST = [1600] # batches to test
 #BATCH_LIST = [1600]
@@ -35,7 +36,7 @@ if __name__ == '__main__':
     ####################
     ## Create a model ##
 
-    linear_regressor = LinearRegressor(NUM_FEATURES)
+    linear_regressor = FactorizationMachine(NUM_FEATURES, NUM_FACTORS)
 
     #####################
     ## Train the model ##

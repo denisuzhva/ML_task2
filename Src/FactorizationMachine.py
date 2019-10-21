@@ -18,7 +18,7 @@ class FactorizationMachine(Model):
 
         v2 = np.power(self.__v, 2)
         x2 = np.power(x, 2)
-        factor_member = np.sum(np.power(np.dot(x, v), 2) - np.dot(x2, v2), axis=1) / 2
+        factor_member = np.sum(np.power(np.dot(x, self.__v), 2) - np.dot(x2, v2), axis=1) / 2
 
         prediction = self.__b + np.dot(x, self.__w) + factor_member
         return prediction
@@ -38,9 +38,9 @@ class FactorizationMachine(Model):
         # N = batch_size; n = num_features; k = num_factors
         # i, j = {1..n}; f = {1..k}
         x2 = np.repeat(np.power(x_batch, 2)[:, :, np.newaxis], self._num_factors, axis=2)  # construct R^{N x n x k} 
-        m = np.dot(x, self.__v) # sum v_{jf} * x_j
-        xm = np.dot(x.reshape((batch_size, -1, 1)), m.reshape((batch_size, 1, -1))) # R^{N x n} to R^{N x n x 1} and R^{N x k} to R^{N x 1 x k}
-        x2v = np.multiply(v, x2)    # x_i^2 * v_{if}
+        m = np.dot(x_batch, self.__v) # sum v_{jf} * x_j
+        xm = np.dot(x_batch.reshape((batch_size, -1, 1)), m.reshape((batch_size, 1, -1))) # R^{N x n} to R^{N x n x 1} and R^{N x k} to R^{N x 1 x k}
+        x2v = np.multiply(self.__v, x2)    # x_i^2 * v_{if}
         dv = -1 * np.tensordot((z_batch - self.getPrediction(x_batch)), (xm - x2v), axes=(0, 0))
 
         self.__w -= lr * dw
