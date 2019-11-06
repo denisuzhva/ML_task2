@@ -1,11 +1,13 @@
 import numpy as np
+import scipy.sparse as sp
 from FactorizationMachine import FactorizationMachine
 from Session import Session
 import DatasetToolbox as dt
 
 
-NUM_FEATURES = 53   # number of features
-NUM_FACTORS = 5 # number of factors (aka k)
+NUM_FEATURES = 193609 + 610 # number of features
+NUM_SAMPLES = 100836    # number of data samples
+NUM_FACTORS = 3 # number of factors (aka k)
 LR = 1 * 1e-3   # learning rate constant
 BATCH_LIST = [1600] # batches to test
 #BATCH_LIST = [1600]
@@ -17,26 +19,26 @@ REG_GAMMA = 0.1 # gamma parameter (for regularization)
 
 if __name__ == '__main__':
     ## Load a dataset and labels
-    dataset = np.load('../Dataset/FV1_ds.npy')
-    labels = np.load('../Dataset/FV1_l.npy')
+    dataset = sp.load_npz('../Dataset/movielens/dataset_small.npz')
+    labels = np.load('../Dataset/movielens/target.npy')
 
     ####################################
     ## Process the dataset and labels ##
 
     # reduce the number of data samples so it could be divisible by max_batch_size*num_folds 
     reduce_quantizer = NUM_FOLDS * BATCH_LIST[-1]
-    dataset, labels, dataset_size = dt.reduceByQuant(dataset, labels, reduce_quantizer)
+    dataset, labels, NUM_SAMPLES = dt.reduceByQuant(dataset, labels, reduce_quantizer)
 
     # normalize dataset
-    dataset = dt.normalize(dataset, NUM_FOLDS)
+    #dataset = dt.normalize(dataset, NUM_FOLDS)
 
     # shuffle data samples and labels
-    dataset, labels = dt.shuffle(dataset, labels)
+    dataset, labels = dt.shuffle(dataset, labels, NUM_SAMPLES)
 
     ####################
     ## Create a model ##
 
-    linear_regressor = FactorizationMachine(NUM_FEATURES, NUM_FACTORS)
+    factor_machine = FactorizationMachine(NUM_FEATURES, NUM_FACTORS)
 
     #####################
     ## Train the model ##
@@ -64,8 +66,9 @@ if __name__ == '__main__':
 
         metrics_tensor[batch_size_counter], 
         weight_tensor[batch_size_counter], 
-        time_tensor[batch_size_counter] = sess.crossValidation(linear_regressor, 
+        time_tensor[batch_size_counter] = sess.crossValidation(factor_machine, 
                                                                dataset, labels, 
+                                                               NUM_FEATURES, NUM_SAMPLES,
                                                                NUM_EPOCHS, EPOCH_QUANTIZER, 
                                                                batch_size, 
                                                                NUM_FOLDS,

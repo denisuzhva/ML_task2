@@ -1,10 +1,11 @@
 import numpy as np
+import scipy.sparse as sp
 
 
 
-def shuffle(dataset, labels):
-    dataset_size = labels.shape[0]
-    p = np.random.permutation(dataset_size)
+def shuffle(dataset, labels, dataset_size):
+    p = np.arange(dataset_size)
+    np.random.shuffle(p)
 
     dataset = dataset[p, :]
     labels = labels[p]
@@ -12,8 +13,7 @@ def shuffle(dataset, labels):
     return dataset, labels
 
 
-def reduceByQuant(dataset, labels, quantizer=1):  # make its size divisible by batch_size*num_folds
-    dataset_size = labels.shape[0]
+def reduceByQuant(dataset, labels, dataset_size, quantizer=1):  # make its size divisible by batch_size*num_folds
     multiple_size = (dataset_size // quantizer) * quantizer
 
     dataset = dataset[0:multiple_size, :]
@@ -23,9 +23,7 @@ def reduceByQuant(dataset, labels, quantizer=1):  # make its size divisible by b
     return dataset, labels, new_dataset_size
 
 
-def normalize(dataset, num_folds=1):
-    dataset_size = dataset.shape[0]
-    num_features = dataset.shape[1]
+def normalize(dataset, num_folds, dataset_size, num_features):
     fold_size = dataset_size // num_folds
 
     for fold_iter in range(num_folds):
@@ -47,12 +45,15 @@ def normalize(dataset, num_folds=1):
 
 def makeFolds(dataset, labels, start_index, end_index, is_train):
     if is_train:
-        data_fold = np.delete(dataset,
-                              slice(start_index, end_index),
-                              axis=0)
+        #data_fold = np.delete(dataset,
+        #                      slice(start_index, end_index),
+        #                      axis=0)
         label_fold = np.delete(labels,
                                slice(start_index, end_index),
                                axis=0)
+        data_fold_1 = dataset[0 : start_index, :]
+        data_fold_2 = dataset[end_index : -1, :]
+        data_fold = sp.vstack([data_fold_1, data_fold_2])
     # is_val
     else:
         data_fold = dataset[start_index:end_index, :]

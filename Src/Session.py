@@ -14,13 +14,11 @@ class Session:
     ## perform cross-validation
     def crossValidation(self, model, 
                         dataset, labels,
+                        num_features, num_samples,
                         epochs, epoch_quant,
                         batch_size,
                         num_folds,
                         learning_rate):
-
-        dataset_size = dataset.shape[0]
-        num_features = dataset.shape[1]
 
         metrics_tensor = np.zeros((num_folds,
                                    epoch_quant,
@@ -41,8 +39,8 @@ class Session:
             print('== Current validation fold: %d ==' % fold_iter)
             model.resetWeights()
             
-            start_index = (dataset_size // num_folds) * fold_iter
-            end_index = (dataset_size // num_folds) * (fold_iter+1)
+            start_index = (num_samples // num_folds) * fold_iter
+            end_index = (num_samples // num_folds) * (fold_iter+1)
 
             train_folds, train_labels = dt.makeFolds(dataset, labels, 
                                                      start_index, end_index, 
