@@ -26,11 +26,6 @@ class Session:
                                    2),
                                   dtype=float)  
 
-        weight_tensor = np.zeros((num_folds,
-                                  epoch_quant,
-                                  num_features + 1),
-                                 dtype=float)
-
         time_var = 0
 
         start_time = time.time()
@@ -56,8 +51,10 @@ class Session:
 
                 if epoch_iter % (epochs // epoch_quant) == 0:
 
-                    train_pred = model.getPrediction(train_folds)
-                    val_pred = model.getPrediction(val_folds)
+                    print('= Current epoch: %d =' % epoch_iter)
+
+                    train_pred = model.getPrediction(train_folds, batch_size)
+                    val_pred = model.getPrediction(val_folds, batch_size)
 
                     train_rmse = eva.rmseMetric(train_pred, train_labels)
                     val_rmse = eva.rmseMetric(val_pred, val_labels)
@@ -74,14 +71,10 @@ class Session:
                     metrics_tensor[fold_iter][epoch_quant_iter][1][0] = train_r2 
                     metrics_tensor[fold_iter][epoch_quant_iter][1][1] = val_r2 
                    
-                    model_w, model_b = model.getWeights()
-                    model_w_full = np.append(model_w, model_b)
-                    weight_tensor[fold_iter][epoch_quant_iter] = model_w_full
-
                     epoch_quant_iter  += 1
 
         end_time = time.time()
         time_var = end_time - start_time
 
-        return metrics_tensor, weight_tensor, time_var
+        return metrics_tensor, time_var
 

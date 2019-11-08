@@ -1,5 +1,5 @@
 import numpy as np
-import scipy.sparse as sp
+#import scipy.sparse as sp
 
 
 
@@ -45,15 +45,15 @@ def normalize(dataset, num_folds, dataset_size, num_features):
 
 def makeFolds(dataset, labels, start_index, end_index, is_train):
     if is_train:
-        #data_fold = np.delete(dataset,
-        #                      slice(start_index, end_index),
-        #                      axis=0)
+        data_fold = np.delete(dataset,
+                              slice(start_index, end_index),
+                              axis=0)
         label_fold = np.delete(labels,
                                slice(start_index, end_index),
                                axis=0)
-        data_fold_1 = dataset[0 : start_index, :]
-        data_fold_2 = dataset[end_index : -1, :]
-        data_fold = sp.vstack([data_fold_1, data_fold_2])
+        #data_fold_1 = dataset[0 : start_index, :]
+        #data_fold_2 = dataset[end_index : -1, :]
+        #data_fold = sp.vstack([data_fold_1, data_fold_2])
     # is_val
     else:
         data_fold = dataset[start_index:end_index, :]

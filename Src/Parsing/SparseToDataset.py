@@ -9,8 +9,8 @@ USR_NUM = 2649429
 
 if __name__ == '__main__':
 
-    sparse_dir = '../Dataset/'
-    sparse_mat = sp.load_npz(sparse_dir + 'sparse.npz')
+    sparse_dir = '../../Dataset/netflix/'
+    sparse_mat = sp.load_npz(sparse_dir + 'netfilx_sparse_mat.npz')
     sp_rows, sp_cols = sparse_mat.nonzero() # rows = users, cols = kinos
     true_len = sp_rows.shape[0]
     print('Entries: %i' % true_len)
