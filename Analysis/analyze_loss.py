@@ -6,12 +6,12 @@ rcParams['ytick.direction'] = 'in'
 
 
 
-def prepareRow(row):
+def prepareRow(row, round_amount):
     row_mean = np.mean(row)
     row_std = np.std(row)
     row = np.append(row, row_mean)
     row = np.append(row, row_std)
-    row = np.round(row, 2)
+    row = np.round(row, round_amount)
     return row
 
 
@@ -38,21 +38,25 @@ def plotLoss(metric_data, epochs, epoch_quant, is_rmse=True, is_train=True):
 
 
 if __name__ == '__main__':
-    metric_data = np.load('../TrainData/metrics.npy')
-    epochs = 1000
+    metric_data = np.load('../TrainData/netflix/metrics.npy')
+    epochs = 500
     epoch_quant = 100
     print(metric_data.shape)
-    plotLoss(metric_data, epochs, epoch_quant, True, True)
+    #plotLoss(metric_data, epochs, epoch_quant, False, True)
     
     batch = 0
+    print(metric_data[0, 1, :, 0, 0])
+    print(metric_data[0, 0, :, 0, 0])
     rows = [metric_data[batch, :, -1, 0, 1],   # RMSE val 
             metric_data[batch, :, -1, 0, 0],   # RMSE train 
             metric_data[batch, :, -1, 1, 1],   # R2 val
             metric_data[batch, :, -1, 1, 0]   # R2 train
             ]
 
+    round_amount = 5
+
     for row_count, row  in enumerate(rows, start=0):
-        rows[row_count] = prepareRow(row)
+        rows[row_count] = prepareRow(row, round_amount)
 
 
     loss_rows = np.stack((rows[0], 
@@ -64,6 +68,6 @@ if __name__ == '__main__':
     R2_val_string = ' '.join(map(str, rows[2]))
     R2_train_string = ' '.join(map(str, rows[3]))
 
-
-    np.savetxt('./metrics.csv', loss_rows, delimiter=' ', fmt='%.2f')
+    fmt = '%.{}f'.format(round_amount)
+    np.savetxt('./metrics.csv', loss_rows, delimiter=' ', fmt=fmt)
 
