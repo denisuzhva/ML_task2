@@ -42,15 +42,11 @@ if __name__ == '__main__':
     epochs = 500
     epoch_quant = 100
     print(metric_data.shape)
-    #plotLoss(metric_data, epochs, epoch_quant, False, True)
+    plotLoss(metric_data, epochs, epoch_quant, True, True)  # always RMSE
     
     batch = 0
-    print(metric_data[0, 1, :, 0, 0])
-    print(metric_data[0, 0, :, 0, 0])
     rows = [metric_data[batch, :, -1, 0, 1],   # RMSE val 
             metric_data[batch, :, -1, 0, 0],   # RMSE train 
-            metric_data[batch, :, -1, 1, 1],   # R2 val
-            metric_data[batch, :, -1, 1, 0]   # R2 train
             ]
 
     round_amount = 5
@@ -60,13 +56,10 @@ if __name__ == '__main__':
 
 
     loss_rows = np.stack((rows[0], 
-                          rows[1], 
-                          rows[2],
-                          rows[3]), axis=0)
+                          rows[1]
+                          ), axis=0)
     RMSE_val_string = ' '.join(map(str, rows[0]))
     RMSE_train_string = ' '.join(map(str, rows[1]))
-    R2_val_string = ' '.join(map(str, rows[2]))
-    R2_train_string = ' '.join(map(str, rows[3]))
 
     fmt = '%.{}f'.format(round_amount)
     np.savetxt('./metrics.csv', loss_rows, delimiter=' ', fmt=fmt)

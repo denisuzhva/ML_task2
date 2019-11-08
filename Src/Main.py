@@ -56,7 +56,7 @@ if __name__ == '__main__':
     metrics_tensor = np.zeros((len(BATCH_LIST),  # write at each batch
                                NUM_FOLDS,  # at each fold
                                EPOCH_QUANTIZER,   # ...at each self._epoch_quantize_param's epoch
-                               2,    # for all the metrics to write
+                               1,    # for all the metrics to write
                                2),   # for train and validation metric
                                dtype=np.float)  
 

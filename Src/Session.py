@@ -22,7 +22,7 @@ class Session:
 
         metrics_tensor = np.zeros((num_folds,
                                    epoch_quant,
-                                   2,
+                                   1,
                                    2),
                                   dtype=float)  
 
@@ -58,18 +58,12 @@ class Session:
 
                     train_rmse = eva.rmseMetric(train_pred, train_labels)
                     val_rmse = eva.rmseMetric(val_pred, val_labels)
-                    train_r2 = eva.r2Metric(train_pred, train_labels)
-                    val_r2 = eva.r2Metric(train_pred, train_labels)
 
                     assert ~np.isnan(train_rmse)
                     assert ~np.isnan(val_rmse)
-                    assert ~np.isnan(train_r2)
-                    assert ~np.isnan(val_r2) 
 
                     metrics_tensor[fold_iter][epoch_quant_iter][0][0] = train_rmse 
                     metrics_tensor[fold_iter][epoch_quant_iter][0][1] = val_rmse 
-                    metrics_tensor[fold_iter][epoch_quant_iter][1][0] = train_r2 
-                    metrics_tensor[fold_iter][epoch_quant_iter][1][1] = val_r2 
                    
                     epoch_quant_iter  += 1
 
