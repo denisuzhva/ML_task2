@@ -38,8 +38,8 @@ def plotLoss(metric_data, epochs, epoch_quant, is_rmse=True, is_train=True):
 
 
 if __name__ == '__main__':
-    metric_data = np.load('../TrainData/metrics.npy')
-    epochs = 1000
+    metric_data = np.load('../TrainData/netflix/metrics.npy')
+    epochs = 500
     epoch_quant = 100
     print(metric_data.shape)
     plotLoss(metric_data, epochs, epoch_quant, True, True)
