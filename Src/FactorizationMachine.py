@@ -35,12 +35,21 @@ class FactorizationMachine(Model):
         xt = x_batch.transpose()
         dw = xt.dot(diff_part)
 
-        print('DONE')
-
         # N = batch_size; n = num_features; k = num_factors
         # i, j = {1..n}; f = {1..k}
+        #m = x_batch.dot(self.__v) # sum v_{jf} * x_j
+        x2t = xt.power(2)
+        diff_x2 = x2t.dot(diff_part).reshape((self._num_features, 1))
+
+        x_batch_dense = np.array(x_batch.todense())
+        diff_xvx = np.einsum('jf,b,bi,bj->if', self.__v, diff_part, x_batch_dense, x_batch_dense)
+        print(diff_xvx.shape)
+        print(diff_x2)
+        print(m.shape)
+        
+        
+
         x2 = np.repeat(np.power(x_batch_dense, 2)[:, :, np.newaxis], self._num_factors, axis=2)  # construct R^{N x n x k} 
-        m = np.dot(x_batch_dense, self.__v) # sum v_{jf} * x_j
         xm = np.dot(x_batch_dense.reshape((batch_size, -1, 1)), m.reshape((batch_size, 1, -1))) # R^{N x n} to R^{N x n x 1} and R^{N x k} to R^{N x 1 x k}
         x2v = np.multiply(self.__v, x2)    # x_i^2 * v_{if}
         dv = -1 * np.tensordot((z_batch - self.getPrediction(x_batch_dense)), (xm - x2v), axes=(0, 0))
