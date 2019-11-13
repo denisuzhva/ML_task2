@@ -22,14 +22,9 @@ class Session:
 
         metrics_tensor = np.zeros((num_folds,
                                    epoch_quant,
-                                   2,
+                                   1,
                                    2),
                                   dtype=float)  
-
-        weight_tensor = np.zeros((num_folds,
-                                  epoch_quant,
-                                  num_features + 1),
-                                 dtype=float)
 
         time_var = 0
 
@@ -61,27 +56,17 @@ class Session:
 
                     train_rmse = eva.rmseMetric(train_pred, train_labels)
                     val_rmse = eva.rmseMetric(val_pred, val_labels)
-                    train_r2 = eva.r2Metric(train_pred, train_labels)
-                    val_r2 = eva.r2Metric(train_pred, train_labels)
 
                     assert ~np.isnan(train_rmse)
                     assert ~np.isnan(val_rmse)
-                    assert ~np.isnan(train_r2)
-                    assert ~np.isnan(val_r2) 
 
                     metrics_tensor[fold_iter][epoch_quant_iter][0][0] = train_rmse 
                     metrics_tensor[fold_iter][epoch_quant_iter][0][1] = val_rmse 
-                    metrics_tensor[fold_iter][epoch_quant_iter][1][0] = train_r2 
-                    metrics_tensor[fold_iter][epoch_quant_iter][1][1] = val_r2 
-                   
-                    model_w, model_b = model.getWeights()
-                    model_w_full = np.append(model_w, model_b)
-                    weight_tensor[fold_iter][epoch_quant_iter] = model_w_full
 
                     epoch_quant_iter  += 1
 
         end_time = time.time()
         time_var = end_time - start_time
 
-        return metrics_tensor, weight_tensor, time_var
+        return metrics_tensor, time_var
 

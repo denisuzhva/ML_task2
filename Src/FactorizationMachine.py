@@ -17,31 +17,24 @@ class FactorizationMachine(Model):
     def getPrediction(self, x):
 
         v2 = np.power(self.__v, 2)
-        #x2 = np.power(x, 2)
         x2 = x.power(2)
-        #x2 = x
         factor_member = np.sum(np.power(x.dot(self.__v), 2) - x2.dot(v2), axis=1) / 2
-        #xv2 = np.dot(x, self.__v).power(2)
-        #xv2 = np.power(x.dot(self.__v), 2)
-        #x2v2 = x2.dot(v2)
-        #factor_member = np.sum((xv2 - x2v2), axis=1) / 2
-        
+                
         prediction = self.__b + x.dot(self.__w) + factor_member
         return prediction
 
 
     def updateParameters(self, x_batch, z_batch, batch_size, lr=0.01):  # dL / dw ?
 
-        # d(RMSE) / dw = (1/2) * d(MSE) / RMSE
-        x_batch_dense = np.array(x_batch.todense())
-        prediction = self.getPrediction(x_batch)
-        loss = np.sum(np.square(z_batch - prediction)) / batch_size
-        loss = np.sqrt(loss)
+        pred_batch = self.getPrediction(x_batch)
+        diff_part = -2 * (z_batch - pred_batch) / batch_size
+        #batch_range = range(batch_size)
 
-        dw = -1 * np.dot((z_batch - prediction), x_batch_dense) / \
-            (batch_size * loss)
-        db = -1 * np.sum(z_batch - prediction) / \
-            (batch_size * loss)
+        db = np.sum(diff_part)
+
+        xt = x_batch.transpose()
+        dw = xt.dot(diff_part)
+
         print('DONE')
 
         # N = batch_size; n = num_features; k = num_factors
