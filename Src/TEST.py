@@ -15,7 +15,6 @@ b[1, 1] = 0.5
 b_csr = b.tocsr()
 b_dense = np.array(b_csr.todense())
 
-c_dense = np.array([[1, 2], [3, 4], [5, 6]])
-b_repeated = np.repeat(b_dense[:, :, np.newaxis], 3, axis=0)
+v = np.array([2, 3]).reshape((2, 1))
 print(b_dense)
-print(b_repeated)
+print(np.multiply(b_dense, v))

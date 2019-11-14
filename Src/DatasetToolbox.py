@@ -43,7 +43,7 @@ def normalize(dataset, num_folds, dataset_size, num_features):
     return dataset
 
 
-def makeFolds(dataset, labels, start_index, end_index, is_train):
+def makeFolds(dataset, labels, num_samples, start_index, end_index, is_train):
     if is_train:
         #data_fold = np.delete(dataset,
         #                      slice(start_index, end_index),
@@ -52,7 +52,7 @@ def makeFolds(dataset, labels, start_index, end_index, is_train):
                                slice(start_index, end_index),
                                axis=0)
         data_fold_1 = dataset[0 : start_index, :]
-        data_fold_2 = dataset[end_index : -1, :]
+        data_fold_2 = dataset[end_index : num_samples, :]
         data_fold = sp.vstack([data_fold_1, data_fold_2])
     # is_val
     else:

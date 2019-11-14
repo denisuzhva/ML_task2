@@ -37,19 +37,24 @@ class Session:
             start_index = (num_samples // num_folds) * fold_iter
             end_index = (num_samples // num_folds) * (fold_iter+1)
 
-            train_folds, train_labels = dt.makeFolds(dataset, labels, 
+            train_folds, train_labels = dt.makeFolds(dataset, labels,
+                                                     num_samples, 
                                                      start_index, end_index, 
                                                      is_train=True)
             val_folds, val_labels = dt.makeFolds(dataset, labels, 
+                                                 num_samples,
                                                  start_index, end_index, 
                                                  is_train=False)
 
             epoch_quant_iter = 0            
             for epoch_iter in range(epochs):
 
-                opt.optimize(model, train_folds, train_labels, batch_size, learning_rate)
+                learning_rate_dec = (0.97 ** epoch_iter) * learning_rate
+                opt.optimize(model, train_folds, train_labels, batch_size, learning_rate_dec)
 
                 if epoch_iter % (epochs // epoch_quant) == 0:
+
+                    print('= Epoch: %d =' % epoch_iter)
 
                     train_pred = model.getPrediction(train_folds)
                     val_pred = model.getPrediction(val_folds)

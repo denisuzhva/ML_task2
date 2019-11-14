@@ -22,7 +22,8 @@ def plotLoss(metric_data, epochs, epoch_quant, is_rmse=True, is_train=True):
     for fold_iter in range(plot_data.shape[0]):
         plt.plot(epoch_data, plot_data[fold_iter, :], label='Fold # %d' % (fold_iter))
     
-    plt.axis([0, epochs, np.min(plot_data) * 0.95, np.max(plot_data) * 1.2])
+    #plt.axis([0, epochs, np.min(plot_data) * 0.95, np.max(plot_data) * 1.2])
+    plt.axis([0, epochs, 0, np.max(plot_data) * 1.2])
 
     plt.title('%s on epoch (%s loss)' % ('RMSE' if is_rmse else 'R2', 
                                          'train' if is_train else 'validation'))
@@ -39,8 +40,8 @@ def plotLoss(metric_data, epochs, epoch_quant, is_rmse=True, is_train=True):
 
 if __name__ == '__main__':
     metric_data = np.load('../TrainData/netflix/metrics.npy')
-    epochs = 500
-    epoch_quant = 100
+    epochs = 30
+    epoch_quant = 30
     print(metric_data.shape)
     plotLoss(metric_data, epochs, epoch_quant, True, True)
     

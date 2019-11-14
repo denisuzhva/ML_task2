@@ -9,9 +9,9 @@ class FactorizationMachine(Model):
 
         self._num_features = num_features
         self._num_factors = num_factors # a.k.a. k
-        self.__w = np.zeros(self._num_features, dtype=np.float)    # w vector
         self.__b = 0    # bias
-        self.__v = np.zeros((self._num_features, self._num_factors), dtype=np.float)    # second order factor matrix
+        self.__w = np.random.randn(self._num_features)    # w vector
+        self.__v = np.random.randn(self._num_features, self._num_factors)    # second order factor matrix
 
 
     def getPrediction(self, x):
@@ -28,31 +28,25 @@ class FactorizationMachine(Model):
 
         pred_batch = self.getPrediction(x_batch)
         diff_part = -2 * (z_batch - pred_batch) / batch_size
-        #batch_range = range(batch_size)
 
         db = np.sum(diff_part)
 
         xt = x_batch.transpose()
         dw = xt.dot(diff_part)
 
-        # N = batch_size; n = num_features; k = num_factors
-        # i, j = {1..n}; f = {1..k}
-        #m = x_batch.dot(self.__v) # sum v_{jf} * x_j
+        m = x_batch.dot(self.__v) # sum v_{jf} * x_j
         x2t = xt.power(2)
-        diff_x2 = x2t.dot(diff_part).reshape((self._num_features, 1))
+        diff_vx2 = np.multiply(self.__v, x2t.dot(diff_part).reshape((self._num_features, 1)))
 
         x_batch_dense = np.array(x_batch.todense())
-        diff_xvx = np.einsum('jf,b,bi,bj->if', self.__v, diff_part, x_batch_dense, x_batch_dense)
-        print(diff_xvx.shape)
-        print(diff_x2)
-        print(m.shape)
-        
-        
+        diff_xvx = np.einsum('b,bi,bf->if', diff_part, x_batch_dense, m)
 
-        x2 = np.repeat(np.power(x_batch_dense, 2)[:, :, np.newaxis], self._num_factors, axis=2)  # construct R^{N x n x k} 
-        xm = np.dot(x_batch_dense.reshape((batch_size, -1, 1)), m.reshape((batch_size, 1, -1))) # R^{N x n} to R^{N x n x 1} and R^{N x k} to R^{N x 1 x k}
-        x2v = np.multiply(self.__v, x2)    # x_i^2 * v_{if}
-        dv = -1 * np.tensordot((z_batch - self.getPrediction(x_batch_dense)), (xm - x2v), axes=(0, 0))
+        #batch_range = range(batch_size)
+        #diff_xvx = np.zeros((self._num_features, self._num_factors), dtype=np.float)
+        #for t in batch_range:
+        #    diff_xvx += diff_part[t] * x_batch_dense[t, :].reshape((self._num_features, 1)) .dot(m[t, :].reshape((1, self._num_factors)))
+
+        dv = diff_xvx - diff_vx2
 
         self.__w -= lr * dw
         self.__b -= lr * db

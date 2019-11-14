@@ -6,7 +6,7 @@ import DatasetToolbox as dt
 
 
 
-DATASET = 'movielens_small'
+DATASET = 'netflix'
 
 if DATASET == 'netflix':
     NUM_FEATURES = 17770 + 2649429   # number of features
@@ -18,10 +18,10 @@ elif DATASET == 'movielens_small':
     DATASET_NAME = 'movielens_small_dataset_oh'
 
 NUM_FACTORS = 4 # number of factors (aka k)
-LR = 1 * 1e-3   # learning rate constant
-BATCH_LIST = [2048] # batches to test
-NUM_EPOCHS = 100  # number of epochs
-EPOCH_QUANTIZER = 100   # write metric values "EPOCH_QUANTIZER" times
+LR = 1 * 1e-1   # learning rate constant (decay will be applied)
+BATCH_LIST = [1024] # batches to test
+NUM_EPOCHS = 30  # number of epochs
+EPOCH_QUANTIZER = 30   # write metric values "EPOCH_QUANTIZER" times
 NUM_FOLDS = 5   # number of folds
 REG_GAMMA = 0.1 # gamma parameter (for regularization)
 
