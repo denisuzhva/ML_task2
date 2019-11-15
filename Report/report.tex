@@ -12,22 +12,22 @@
 
 Hyperparameters:
 \begin{itemize}
-    	\item Number of epochs: 500
-    	\item Batch size: 2000
-    	\item Learning rate $0.01$
-    	\item Number of folds: 5
-    	\item Number of features: 2667199
-	\item Number of factors: 5
+	\item Number of epochs: 30
+	\item Batch size: 1024
+	\item Learning rate $0.1$
+	\item Learning rate decay: $lr \rightarrow lr \cdot 0.97^{epoch}$
+	\item Number of folds: 5
+	\item Number of features: 2667199
+	\item Number of factors: 4
 \end{itemize}
 
 \begin{longtable}{llllllll}
-    	\toprule
-    		&	Fold 1  &   Fold 2 & Fold 3  & Fold 4 & Fold 5   & E & STD   \\
-    	\midrule
-    	    	$RMSE$ val	&	1.08449	&	1.08451	&	1.08452	&	1.08444	&	1.08450	&	1.08449	&	0.00003	\\
-    	    	$RMSE$ train	&	1.08436	&	1.08452	&	1.08452	&	1.08454	&	1.08452	&	1.08449	&	0.00007	\\
-    	\bottomrule
-    	\caption{Training results}
+	\toprule
+		&	Fold 1  &   Fold 2 & Fold 3  & Fold 4 & Fold 5   & E & STD   \\
+	\midrule
+		$RMSE$ val	&	1.08810	&	1.08696	&	1.08717	&	1.08728	&	1.08713	&	1.08733	&	0.00040	\\
+		$RMSE$ train	&	1.08808	&	1.08718	&	1.08713	&	1.08710	&	1.08714	&	1.08733	&	0.00038	\\    	\bottomrule
+	\caption{Training results}
 	\label{tab:acc}
 \end{longtable}
 
