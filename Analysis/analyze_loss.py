@@ -11,7 +11,7 @@ def prepareRow(row):
     row_std = np.std(row)
     row = np.append(row, row_mean)
     row = np.append(row, row_std)
-    row = np.round(row, 2)
+    row = np.round(row, 4)
     return row
 
 
@@ -42,7 +42,6 @@ if __name__ == '__main__':
     metric_data = np.load('../TrainData/netflix/metrics.npy')
     epochs = 30
     epoch_quant = 30
-    print(metric_data.shape)
     plotLoss(metric_data, epochs, epoch_quant, True, True)
     
     batch = 0
@@ -66,5 +65,5 @@ if __name__ == '__main__':
     R2_train_string = ' '.join(map(str, rows[3]))
 
 
-    np.savetxt('./metrics.csv', loss_rows, delimiter=' ', fmt='%.2f')
+    np.savetxt('./metrics.csv', loss_rows, delimiter=' ', fmt='%.4f')
 
