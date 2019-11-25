@@ -38,7 +38,7 @@ def plotLoss(metric_data, epochs, epoch_quant, is_rmse=True, is_train=True):
 
 
 if __name__ == '__main__':
-    metric_data = np.load('../TrainData/netflix/metrics.npy')
+    metric_data = np.load('../TrainData/movielens_small/metrics.npy')
     epochs = 30
     epoch_quant = 30
     print(metric_data.shape)

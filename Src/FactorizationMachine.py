@@ -1,5 +1,4 @@
 import numpy as np
-import opt_einsum as oe
 from Model import Model
 
 
@@ -27,7 +26,7 @@ class FactorizationMachine(Model):
 
     def updateParameters(self, x_batch, z_batch, batch_size, lr=0.01):  # dL / dw ?
 
-        pred_batch = self.getPrediction(x_batch)
+        pred_batch = self.getPrediction(x_batch)    # aka d
         diff_part = -2 * (z_batch - pred_batch) / batch_size
 
         db = np.sum(diff_part)
@@ -41,7 +40,9 @@ class FactorizationMachine(Model):
 
         #x_batch_dense = np.array(x_batch.todense())
         #diff_xvx = np.einsum('b,bi,bf->if', diff_part, x_batch_dense, m)
-        diff_xvx = oe.contract('b,bi,bf->if', diff_part, x_batch, m)
+
+        dm = np.multiply(pred_batch.reshape(-1, 1), m)
+        diff_xvx = xt.dot(dm)
 
         #batch_range = range(batch_size)
         #diff_xvx = np.zeros((self._num_features, self._num_factors), dtype=np.float)

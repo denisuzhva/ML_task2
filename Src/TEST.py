@@ -15,6 +15,11 @@ b[1, 1] = 0.5
 b_csr = b.tocsr()
 b_dense = np.array(b_csr.todense())
 
-v = np.array([2, 3]).reshape((2, 1))
+
+v = np.array([2, 3]).reshape(-1, 1)
 print(b_dense)
-print(np.multiply(b_dense, v))
+print(v)
+print(np.multiply(v, b_dense))
+
+
+
