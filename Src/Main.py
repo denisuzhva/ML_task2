@@ -6,7 +6,7 @@ import DatasetToolbox as dt
 
 
 
-DATASET = 'netflix'
+DATASET = 'movielens_small'
 
 if DATASET == 'netflix':
     NUM_FEATURES = 17770 + 2649429   # number of features

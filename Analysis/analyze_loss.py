@@ -42,7 +42,7 @@ if __name__ == '__main__':
     epochs = 30
     epoch_quant = 30
     print(metric_data.shape)
-    plotLoss(metric_data, epochs, epoch_quant, True, True)  # always RMSE
+    plotLoss(metric_data, epochs, epoch_quant, True, False)  # always RMSE
     
     batch = 0
     rows = [metric_data[batch, :, -1, 0, 1],   # RMSE val 
