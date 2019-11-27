@@ -41,7 +41,7 @@ class FactorizationMachine(Model):
         #x_batch_dense = np.array(x_batch.todense())
         #diff_xvx = np.einsum('b,bi,bf->if', diff_part, x_batch_dense, m)
 
-        dm = np.multiply(pred_batch.reshape(-1, 1), m)
+        dm = np.multiply(diff_part.reshape(-1, 1), m)
         diff_xvx = xt.dot(dm)
 
         #batch_range = range(batch_size)
