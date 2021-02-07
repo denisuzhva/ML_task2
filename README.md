@@ -1,6 +1,6 @@
 # ML_task2
 
-Factorization machine for netflix items ranking.
+Netflix items ranking using a fatorization machine.
 
 ## Dependencies
 
